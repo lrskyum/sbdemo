@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 
-//@EnableTransactionManagement
 @Configuration
 @Profile("!tempdb")
 @Service

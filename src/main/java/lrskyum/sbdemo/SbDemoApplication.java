@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 @Configuration
 @Slf4j
-public class SbdemoApplication {
+public class SbDemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SbdemoApplication.class, args);
+        SpringApplication.run(SbDemoApplication.class, args);
     }
 }

@@ -34,14 +34,17 @@ public class OrdersControllerTest {
 
     @Test
     public void shouldGetInitialOrders_withTenOrders() {
+        // Arrange
         testClient.get()
                 .uri("/orders")
+                // Act
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(CustomerOrder.class)
                 .hasSize(10)
                 .consumeWith(response -> {
                     List<CustomerOrder> orders = response.getResponseBody();
+                    // Assert
                     assertNotNull(orders);
                     orders.forEach(order -> {
                         assertNotNull(order.getOrderStatus());
