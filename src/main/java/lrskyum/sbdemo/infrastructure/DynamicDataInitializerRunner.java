@@ -39,7 +39,7 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     private CustomerOrder createOrder(int i) {
         var buyer = Buyer.builder()
-                .email("buyer"+i+"@mailcom")
+                .email("buyer"+i+"@mail.com")
                 .name("John Doe " + i)
                 .build();
         var address = Address.builder()
