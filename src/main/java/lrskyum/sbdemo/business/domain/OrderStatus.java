@@ -1,29 +1,10 @@
 package lrskyum.sbdemo.business.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lrskyum.sbdemo.business.exceptions.OrderingDomainException;
-import org.springframework.lang.NonNull;
-
-import java.util.stream.Stream;
-
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum OrderStatus {
-  Submitted("Submitted"),
-  AwaitingValidation("AwaitingValidation"),
-  StockConfirmed("StockConfirmed"),
-  Paid("Paid"),
-  Shipped("Shipped"),
-  Cancelled("Cancelled");
-
-  @Getter
-  private final String status;
-
-  public static OrderStatus of(@NonNull String status) {
-    return Stream.of(values()).filter(s -> s.getStatus().equals(status))
-        .findFirst()
-        .orElseThrow(() -> new OrderingDomainException("Invalid name for OrderStatus: %s".formatted(status)));
-  }
-
+    ORDER_STATUS,
+    AWAITING_VALIDATION,
+    STOCK_CONFIRMED,
+    PAID,
+    SHIPPED,
+    CANCELLED;
 }

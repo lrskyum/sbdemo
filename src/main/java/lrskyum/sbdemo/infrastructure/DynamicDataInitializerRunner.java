@@ -1,9 +1,11 @@
-package lrskyum.sbdemo.app;
+package lrskyum.sbdemo.infrastructure;
 
 import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.business.domain.Address;
+import lrskyum.sbdemo.business.domain.Buyer;
 import lrskyum.sbdemo.business.domain.CustomerOrder;
-import lrskyum.sbdemo.infrastructure.OrdersRepository;
+import lrskyum.sbdemo.business.domain.OrdersRepository;
+import lrskyum.sbdemo.business.domain.PaymentMethod;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -36,17 +38,20 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
     }
 
     private CustomerOrder createOrder(int i) {
-        var address = Address.builder()
-                .city("Aarhus")
-                .country("Denmark")
-                .zipCode("8000")
-                .street("Lars Street " + i)
+        var buyer = Buyer.builder()
+                .email("buyer"+i+"@mailcom")
+                .name("John Doe " + i)
                 .build();
-        return CustomerOrder.create("Lars Description", address);
+        var address = Address.builder()
+                .street("Street " + i)
+                .zip("8000")
+                .country("Denmark")
+                .build();
+        return CustomerOrder.create("Order Description " + i, address, buyer, PaymentMethod.CREDIT_CARD, "Product " + i);
     }
 
     public Mono<Void> initializeFlux(ReactiveTransaction reactiveTransaction) {
-        var tempOrders = IntStream.range(0, 3)
+        var tempOrders = IntStream.range(0, 10)
                 .mapToObj(this::createOrder)
                 .toList();
         var ordersFlux = Flux.fromIterable(tempOrders)

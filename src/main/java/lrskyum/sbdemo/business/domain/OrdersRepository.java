@@ -1,6 +1,5 @@
-package lrskyum.sbdemo.infrastructure;
+package lrskyum.sbdemo.business.domain;
 
-import lrskyum.sbdemo.business.domain.CustomerOrder;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 

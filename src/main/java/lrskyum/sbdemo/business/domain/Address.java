@@ -15,17 +15,15 @@ import java.util.List;
 @ToString
 public class Address extends ValueObject {
     private final String street;
-    private final String city;
+    private final String zip;
     private final String country;
-    private final String zipCode;
 
     @Override
     protected List<Object> getEqualityComponents() {
         return List.of(
                 street,
-                city,
-                country,
-                zipCode
+                zip,
+                country
         );
     }
 }
