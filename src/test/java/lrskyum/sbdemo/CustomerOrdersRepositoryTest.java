@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
@@ -13,7 +12,6 @@ import reactor.test.StepVerifier;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-@Import(TestcontainersConfiguration.class)
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("tempdb")

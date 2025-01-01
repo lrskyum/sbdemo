@@ -17,7 +17,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) ->
-                        requests.requestMatchers("/", "/api/**", "/actuator/**")
+                        requests.requestMatchers("/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
