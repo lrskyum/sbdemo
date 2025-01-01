@@ -50,9 +50,9 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
                 .mapToObj(this::createOrder)
                 .toList();
         var ordersFlux = Flux.fromIterable(tempOrders)
-                .flatMap(ordersRepository::save) // Save each entity
-                .then(); // Return a Mono<Void> signaling completion
-        return ordersFlux; //.as(transactionalOperator::transactional);
+                .flatMap(ordersRepository::save)
+                .then();
+        return ordersFlux;
     }
 
     public Mono<Void> initializeData() {

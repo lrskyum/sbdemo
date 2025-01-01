@@ -7,30 +7,21 @@ import com.github.dockerjava.api.model.Ports;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.business.domain.Address;
-import lrskyum.sbdemo.business.domain.CustomerOrder;
-import lrskyum.sbdemo.infrastructure.OrdersRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.r2dbc.ConnectionFactoryBuilder;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.ReactiveTransaction;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Testcontainers

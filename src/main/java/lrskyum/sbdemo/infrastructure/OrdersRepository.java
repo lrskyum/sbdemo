@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Transactional("connectionFactoryTransactionManager")
-public interface OrdersRepository extends ReactiveCrudRepository<CustomerOrder, UUID>{
+public interface OrdersRepository extends ReactiveCrudRepository<CustomerOrder, UUID> {
 }

@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record ShipOrderCommand(
-    @JsonProperty("orderNumber")
-    @NotNull(message = "No order number found")
-    String orderNumber
+        @JsonProperty("orderNumber")
+        @NotNull(message = "No order number found")
+        String orderNumber
 ) implements Command<Boolean> {
 }
