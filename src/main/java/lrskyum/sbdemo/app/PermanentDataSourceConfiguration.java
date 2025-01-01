@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 @Configuration
 @Profile("!tempdb")
 @Service
-public class PermanentDataSourceConfiguration implements DataInitializationService{
+public class PermanentDataSourceConfiguration {
 
     @Value("${spring.datasource.url}")
     private String url;
@@ -41,10 +41,5 @@ public class PermanentDataSourceConfiguration implements DataInitializationServi
         dataSourceBuilder.username(username);
         dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
-    }
-
-    @Override
-    public Mono<Void> initializeData() {
-        return Mono.empty();
     }
 }
