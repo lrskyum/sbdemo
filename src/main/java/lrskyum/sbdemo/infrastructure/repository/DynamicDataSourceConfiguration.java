@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.infrastructure;
+package lrskyum.sbdemo.infrastructure.repository;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;

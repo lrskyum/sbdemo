@@ -27,7 +27,7 @@ public class CustomerOrder extends AggregateRoot {
     private String product;
 
     public static CustomerOrder create(@NonNull String description, @NonNull Address address, @NonNull Buyer buyer,
-        PaymentMethod paymentMethod, String product) {
+                                       PaymentMethod paymentMethod, String product) {
         var order = createNoEvent(description, address, buyer, paymentMethod, product);
 
         return order;

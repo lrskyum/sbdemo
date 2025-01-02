@@ -1,4 +1,4 @@
-package lrskyum.sbdemo;
+package lrskyum.sbdemo.ui;
 
 import lrskyum.sbdemo.business.domain.CustomerOrder;
 import org.junit.jupiter.api.BeforeEach;

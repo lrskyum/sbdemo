@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.infrastructure;
+package lrskyum.sbdemo.infrastructure.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;

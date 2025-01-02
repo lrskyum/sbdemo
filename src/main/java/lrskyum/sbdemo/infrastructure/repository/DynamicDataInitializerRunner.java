@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.infrastructure;
+package lrskyum.sbdemo.infrastructure.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.business.domain.Address;
@@ -37,31 +37,19 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
                 .block();
     }
 
+    public Mono<Void> initializeData() {
+        return initializeOrders();
+    }
+
     private CustomerOrder createOrder(int i) {
-        var buyer = Buyer.builder()
-                .email("buyer"+i+"@mail.com")
-                .name("John Doe " + i)
-                .build();
-        var address = Address.builder()
-                .street("Street " + i)
-                .zip("8000")
-                .country("Denmark")
-                .build();
+        var buyer = Buyer.builder().email("buyer" + i + "@mail.com").name("John Doe " + i).build();
+        var address = Address.builder().street("Street " + i).zip("8000").country("Denmark").build();
         return CustomerOrder.create("Order Description " + i, address, buyer, PaymentMethod.CREDIT_CARD, "Product " + i);
     }
 
-    public Mono<Void> initializeFlux(ReactiveTransaction reactiveTransaction) {
-        var tempOrders = IntStream.range(0, 10)
-                .mapToObj(this::createOrder)
-                .toList();
-        var ordersFlux = Flux.fromIterable(tempOrders)
-                .flatMap(ordersRepository::save)
-                .then();
+    public Mono<Void> initializeOrders() {
+        var tempOrders = IntStream.range(0, 10).mapToObj(this::createOrder).toList();
+        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(ordersRepository::save).then();
         return ordersFlux;
-    }
-
-    public Mono<Void> initializeData() {
-        return transactionalOperator.execute(this::initializeFlux)
-                .then();
     }
 }

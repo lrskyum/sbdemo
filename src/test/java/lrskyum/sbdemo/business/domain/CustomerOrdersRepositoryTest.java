@@ -1,6 +1,5 @@
-package lrskyum.sbdemo;
+package lrskyum.sbdemo.business.domain;
 
-import lrskyum.sbdemo.business.domain.OrdersRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import reactor.test.StepVerifier;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("tempdb")
 class CustomerOrdersRepositoryTest {
@@ -28,7 +27,8 @@ class CustomerOrdersRepositoryTest {
         var orders = ordersRepository.findAll();
 
         // Assert
-        StepVerifier.create(orders).expectSubscription()
+        StepVerifier.create(orders)
+                .expectSubscription()
                 .thenRequest(Long.MAX_VALUE)
                 .expectNextCount(10)
                 .expectComplete()
@@ -43,7 +43,8 @@ class CustomerOrdersRepositoryTest {
         var orders = ordersRepository.findAll();
 
         // Assert
-        StepVerifier.create(orders).expectSubscription()
+        StepVerifier.create(orders)
+                .expectSubscription()
                 .thenRequest(Long.MAX_VALUE)
                 .thenConsumeWhile(order -> order.getOrderDateUtc().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
                 .expectComplete()
