@@ -1,44 +1,44 @@
 package lrskyum.sbdemo.infrastructure.repository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.business.domain.Address;
 import lrskyum.sbdemo.business.domain.Buyer;
 import lrskyum.sbdemo.business.domain.CustomerOrder;
 import lrskyum.sbdemo.business.domain.OrdersRepository;
 import lrskyum.sbdemo.business.domain.PaymentMethod;
+import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.ReactiveTransaction;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 @Profile("tempdb")
 public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     private final OrdersRepository ordersRepository;
-    private final TransactionalOperator transactionalOperator;
-
-    public DynamicDataInitializerRunner(OrdersRepository repo, TransactionalOperator txOp) {
-        ordersRepository = repo;
-        transactionalOperator = txOp;
-    }
+    private final RequestManager requestManager;
 
     @Override
     public void run(String... args) {
-        initializeData()
-                .doOnError(e -> log.error("Error initializing data: {}", e.getMessage()))
-                .doOnSuccess(unused -> log.info("Data initialized successfully"))
-                .block();
+        initializeData().doOnError(e -> log.error("Error initializing data: {}", e.getMessage())).doOnSuccess(unused -> log.info("Data initialized successfully")).block();
     }
 
     public Mono<Void> initializeData() {
-        return initializeOrders();
+        return initializeOrders().then(initializeClientRequests());
+    }
+
+    public Mono<Void> initializeOrders() {
+        var tempOrders = IntStream.range(0, 10).mapToObj(this::createOrder).toList();
+        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(ordersRepository::save).then();
+        return ordersFlux;
     }
 
     private CustomerOrder createOrder(int i) {
@@ -47,9 +47,9 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
         return CustomerOrder.create("Order Description " + i, address, buyer, PaymentMethod.CREDIT_CARD, "Product " + i);
     }
 
-    public Mono<Void> initializeOrders() {
-        var tempOrders = IntStream.range(0, 10).mapToObj(this::createOrder).toList();
-        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(ordersRepository::save).then();
-        return ordersFlux;
+    public Mono<Void> initializeClientRequests() {
+        var commands = IntStream.range(0, 10).mapToObj(i -> "InitialIdentifiedCommand" + i).toList();
+        var clientRequestFlux = Flux.fromIterable(commands).flatMap(c -> requestManager.createRequestForCommand(UUID.randomUUID(), c)).then();
+        return clientRequestFlux;
     }
 }
