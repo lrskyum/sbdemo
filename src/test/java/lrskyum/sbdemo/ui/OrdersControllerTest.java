@@ -2,9 +2,9 @@ package lrskyum.sbdemo.ui;
 
 import lrskyum.sbdemo.app.commands.CreateOrderCommand;
 import lrskyum.sbdemo.app.commands.CreateOrderIdentifiedCommand;
-import lrskyum.sbdemo.business.domain.CustomerOrder;
-import lrskyum.sbdemo.business.domain.OrderStatus;
-import lrskyum.sbdemo.business.domain.PaymentMethod;
+import lrskyum.sbdemo.business.aggregates.order.CustomerOrder;
+import lrskyum.sbdemo.business.aggregates.order.OrderStatus;
+import lrskyum.sbdemo.business.aggregates.order.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +65,6 @@ public class OrdersControllerTest {
     public void shouldPostOrder_andSaveIt() {
         // Arrange
         var command = CreateOrderCommand.builder()
-                .orderStatus(OrderStatus.AWAITING_VALIDATION)
                 .zip("8000")
                 .country("Denmark")
                 .buyerEmail("johndoe@mail.com")

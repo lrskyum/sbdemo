@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.business.domain;
+package lrskyum.sbdemo.business.aggregates.order;
 
 public enum PaymentMethod {
     CREDIT_CARD,

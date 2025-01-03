@@ -1,5 +1,6 @@
 package lrskyum.sbdemo.business.domain;
 
+import lrskyum.sbdemo.business.aggregates.order.OrdersRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

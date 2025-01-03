@@ -16,8 +16,20 @@ create table customer_order
 
 create table client_request
 (
-    id             serial primary key not null,
-    ext_id   uuid not null,
-    name varchar(255),
-    time timestamp
+    id     serial primary key not null,
+    ext_id uuid               not null,
+    name   varchar(255),
+    time   timestamp
+);
+
+create table outbox
+(
+    id              serial not null,
+    content         varchar(1000),
+    creation_time   timestamp,
+    event_id        uuid,
+    event_state     varchar(255),
+    event_type_name varchar(255),
+    times_sent      integer,
+    topic           varchar(255)
 );

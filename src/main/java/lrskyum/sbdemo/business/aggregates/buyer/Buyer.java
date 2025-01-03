@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.business.domain;
+package lrskyum.sbdemo.business.aggregates.buyer;
 
 import lombok.Builder;
 import lombok.Getter;

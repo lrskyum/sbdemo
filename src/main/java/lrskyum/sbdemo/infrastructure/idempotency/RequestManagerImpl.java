@@ -27,7 +27,7 @@ public class RequestManagerImpl implements RequestManager {
                         return Mono.error(new OrderingDomainException("Request with id: %s already exists".formatted(id)));
                     else {
                         var cr = new ClientRequest.ClientRequestBuilder()
-                                .extId(UUID.randomUUID())
+                                .extId(id)
                                 .name(commandName)
                                 .time(Instant.now())
                                 .build();

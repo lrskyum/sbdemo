@@ -2,11 +2,11 @@ package lrskyum.sbdemo.infrastructure.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.business.domain.Address;
-import lrskyum.sbdemo.business.domain.Buyer;
-import lrskyum.sbdemo.business.domain.CustomerOrder;
-import lrskyum.sbdemo.business.domain.OrdersRepository;
-import lrskyum.sbdemo.business.domain.PaymentMethod;
+import lrskyum.sbdemo.business.aggregates.order.Address;
+import lrskyum.sbdemo.business.aggregates.buyer.Buyer;
+import lrskyum.sbdemo.business.aggregates.order.CustomerOrder;
+import lrskyum.sbdemo.business.aggregates.order.OrdersRepository;
+import lrskyum.sbdemo.business.aggregates.order.PaymentMethod;
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -28,7 +28,10 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        initializeData().doOnError(e -> log.error("Error initializing data: {}", e.getMessage())).doOnSuccess(unused -> log.info("Data initialized successfully")).block();
+        initializeData()
+                .doOnError(e -> log.error("Error initializing data: {}", e.getMessage()))
+                .doOnSuccess(unused -> log.info("Data initialized successfully"))
+                .block();
     }
 
     public Mono<Void> initializeData() {
@@ -37,7 +40,7 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     public Mono<Void> initializeOrders() {
         var tempOrders = IntStream.range(0, 10).mapToObj(this::createOrder).toList();
-        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(ordersRepository::save).then();
+        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(ordersRepository::saveAndEmit).then();
         return ordersFlux;
     }
 
