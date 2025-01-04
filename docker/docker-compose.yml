@@ -11,8 +11,8 @@ services:
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
     volumes:
-      - ./data:/bitnami/kafka/data
-      - ./config:/bitnami/kafka/config
+      - ./volumes/kafka/data:/bitnami/kafka/data
+      - ./volumes/kafka/config:/bitnami/kafka/config
 
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
