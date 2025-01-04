@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class UserCheckoutCommand implements Command<Mono<Boolean>> {
+public class UserCheckoutCommand implements Command<Mono<Void>> {
     private Instant orderDateUtc;
     private BasketStatus basketStatus;
     private String buyerName;

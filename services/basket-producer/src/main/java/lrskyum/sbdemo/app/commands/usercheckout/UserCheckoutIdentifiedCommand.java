@@ -6,7 +6,7 @@ import lrskyum.sbdemo.app.commands.IdentifiedCommand;
 import reactor.core.publisher.Mono;
 
 @Getter
-public class UserCheckoutIdentifiedCommand extends UserCheckoutCommand implements IdentifiedCommand, Command<Mono<Boolean>> {
+public class UserCheckoutIdentifiedCommand extends UserCheckoutCommand implements IdentifiedCommand, Command<Mono<Void>> {
     private final String id;
 
     public UserCheckoutIdentifiedCommand(UserCheckoutCommand command, String id) {

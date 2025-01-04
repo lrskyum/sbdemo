@@ -16,14 +16,14 @@ import java.util.UUID;
 @Slf4j
 @AllArgsConstructor
 @Service
-public class UserCheckoutCommandHandler implements Command.Handler<UserCheckoutCommand, Mono<Boolean>> {
+public class UserCheckoutCommandHandler implements Command.Handler<UserCheckoutCommand, Mono<Void>> {
 
     private final BasketRepository basketRepository;
     private final IntegrationEventLogService integrationEventLogService;
 
     @Override
     @Transactional("connectionFactoryTransactionManager")
-    public Mono<Boolean> handle(UserCheckoutCommand command) {
+    public Mono<Void> handle(UserCheckoutCommand command) {
         var integrationEvent = new UserCheckoutIntegrationEvent(command.getBasketStatus(), command.getBuyerName(),
                 command.getPaymentMethod(), command.getProduct());
         integrationEventLogService.saveEvent(integrationEvent, "basket");
@@ -31,7 +31,7 @@ public class UserCheckoutCommandHandler implements Command.Handler<UserCheckoutC
         final var basket = createBasket(command);
         basketRepository.saveAndEmit(basket).subscribe();
 
-        return Mono.just(true);
+        return Mono.empty();
     }
 
     private Basket createBasket(UserCheckoutCommand command) {

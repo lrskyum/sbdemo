@@ -36,7 +36,7 @@ public class BasketController {
 
     @PostMapping(value = "/checkout")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Boolean> checkout(@RequestBody UserCheckoutCommand command,
+    public Mono<Void> checkout(@RequestBody UserCheckoutCommand command,
                                   @RequestHeader(value = "X-RequestId", required = false) String requestId) {
         if (requestId != null) {
             command = new UserCheckoutIdentifiedCommand(command, requestId);

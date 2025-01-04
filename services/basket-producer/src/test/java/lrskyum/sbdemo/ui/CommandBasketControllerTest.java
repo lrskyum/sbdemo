@@ -15,8 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.time.Duration;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
@@ -54,10 +53,9 @@ public class CommandBasketControllerTest {
                 .bodyValue(command)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(Boolean.class)
+                .expectBody()
                 .consumeWith(response -> {
-                    // Assert
-                    assertEquals(Boolean.TRUE, response.getResponseBody());
+                    assertThat(response.getResponseBody()).isNull();
                 });
     }
 }
