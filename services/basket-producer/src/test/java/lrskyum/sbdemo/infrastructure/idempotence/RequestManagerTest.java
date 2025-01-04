@@ -32,7 +32,7 @@ public class RequestManagerTest {
         StepVerifier.create(exists)
                 .expectSubscription()
                 .thenRequest(Long.MAX_VALUE)
-                .expectNextCount(1)
+                .expectNextMatches(value -> value == false)
                 .expectComplete()
                 .verify();
     }

@@ -1,7 +1,6 @@
 package lrskyum.sbdemo.ui;
 
 import lrskyum.sbdemo.app.commands.usercheckout.UserCheckoutCommand;
-import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("tempdb")
-public class BasketControllerTest {
+public class CommandBasketControllerTest {
 
     @LocalServerPort
     private int port;
@@ -37,27 +35,6 @@ public class BasketControllerTest {
                 .baseUrl("http://localhost:" + port + "/api/v1")
                 .responseTimeout(Duration.ofDays(1))
                 .build();
-    }
-
-    @Test
-    public void shouldGetInitialOrders_withTenOrders() {
-        // Arrange
-        testClient.get()
-                .uri("/basket")
-                // Act
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(Basket.class)
-                .hasSize(10)
-                .consumeWith(response -> {
-                    List<Basket> orders = response.getResponseBody();
-                    // Assert
-                    assertNotNull(orders);
-                    orders.forEach(order -> {
-                        assertNotNull(order.getBasketStatus());
-                        assertNotNull(order.getBasketDateUtc());
-                    });
-                });
     }
 
     @Test
