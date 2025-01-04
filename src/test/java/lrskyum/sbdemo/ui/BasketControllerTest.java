@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-//@ActiveProfiles("tempdb")
+@ActiveProfiles("tempdb")
 public class BasketControllerTest {
 
     @LocalServerPort
