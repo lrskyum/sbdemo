@@ -28,7 +28,7 @@ public class IntegrationEventProcessor {
                 logger.info("No integration events found to publish");
                 return Flux.empty();
             }
-        });
+        }).subscribe();
     }
 
     private void publish(IntegrationEventLogEntry eventLogEntry) {

@@ -1,6 +1,6 @@
 package lrskyum.sbdemo.business.domain;
 
-import lrskyum.sbdemo.business.aggregates.order.OrdersRepository;
+import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,17 @@ import java.time.temporal.ChronoUnit;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("tempdb")
-class CustomerOrdersRepositoryTest {
+class CustomerBasketRepositoryTest {
 
     @Autowired
-    private OrdersRepository ordersRepository;
+    private BasketRepository basketRepository;
 
     @Test
     void shouldInitializeDatabase_withTenOrders() {
         // Arrange
 
         // Act
-        var orders = ordersRepository.findAll();
+        var orders = basketRepository.findAll();
 
         // Assert
         StepVerifier.create(orders)
@@ -41,13 +41,13 @@ class CustomerOrdersRepositoryTest {
         // Arrange
 
         // Act
-        var orders = ordersRepository.findAll();
+        var orders = basketRepository.findAll();
 
         // Assert
         StepVerifier.create(orders)
                 .expectSubscription()
                 .thenRequest(Long.MAX_VALUE)
-                .thenConsumeWhile(order -> order.getOrderDateUtc().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
+                .thenConsumeWhile(order -> order.getBasketDateUtc().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
                 .expectComplete()
                 .verify();
     }

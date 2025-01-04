@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.business.aggregates.order;
+package lrskyum.sbdemo.business.aggregates.basket;
 
 public enum PaymentMethod {
     CREDIT_CARD,

@@ -17,7 +17,7 @@ public class ClientRequest {
     private Long id;
 
     @Getter
-    private UUID extId;
+    private String extId;
 
     @Getter
     private String name;
@@ -25,7 +25,7 @@ public class ClientRequest {
     @Getter
     private Instant time;
 
-    public static ClientRequest create(UUID extId, String cmd, Instant time) {
+    public static ClientRequest create(String extId, String cmd, Instant time) {
         return ClientRequest.builder()
                 .extId(extId)
                 .name(cmd)

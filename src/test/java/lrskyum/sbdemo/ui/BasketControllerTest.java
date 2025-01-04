@@ -1,10 +1,8 @@
 package lrskyum.sbdemo.ui;
 
-import lrskyum.sbdemo.app.commands.CreateOrderCommand;
-import lrskyum.sbdemo.app.commands.CreateOrderIdentifiedCommand;
-import lrskyum.sbdemo.business.aggregates.order.CustomerOrder;
-import lrskyum.sbdemo.business.aggregates.order.OrderStatus;
-import lrskyum.sbdemo.business.aggregates.order.PaymentMethod;
+import lrskyum.sbdemo.app.commands.usercheckout.UserCheckoutCommand;
+import lrskyum.sbdemo.business.aggregates.basket.Basket;
+import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,17 +13,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("tempdb")
-public class OrdersControllerTest {
+//@ActiveProfiles("tempdb")
+public class BasketControllerTest {
 
     @LocalServerPort
     private int port;
@@ -37,6 +35,7 @@ public class OrdersControllerTest {
         testClient = WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:" + port + "/api/v1")
+                .responseTimeout(Duration.ofDays(1))
                 .build();
     }
 
@@ -44,43 +43,38 @@ public class OrdersControllerTest {
     public void shouldGetInitialOrders_withTenOrders() {
         // Arrange
         testClient.get()
-                .uri("/orders")
+                .uri("/basket")
                 // Act
                 .exchange()
                 .expectStatus().isOk()
-                .expectBodyList(CustomerOrder.class)
+                .expectBodyList(Basket.class)
                 .hasSize(10)
                 .consumeWith(response -> {
-                    List<CustomerOrder> orders = response.getResponseBody();
+                    List<Basket> orders = response.getResponseBody();
                     // Assert
                     assertNotNull(orders);
                     orders.forEach(order -> {
-                        assertNotNull(order.getOrderStatus());
-                        assertNotNull(order.getOrderDateUtc());
+                        assertNotNull(order.getBasketStatus());
+                        assertNotNull(order.getBasketDateUtc());
                     });
                 });
     }
 
     @Test
-    public void shouldPostOrder_andSaveIt() {
+    public void shouldCheckoutBasket_andSaveIt() {
         // Arrange
-        var command = CreateOrderCommand.builder()
-                .zip("8000")
-                .country("Denmark")
-                .buyerEmail("johndoe@mail.com")
-                .product("Product 1")
+        var command = UserCheckoutCommand.builder()
                 .buyerName("John Doe")
-                .street("Main Street 1")
-                .description("Description 1")
+                .product("Product 1")
                 .paymentMethod(PaymentMethod.CASH_ON_DELIVERY)
                 .build();
-        var idCommand = new CreateOrderIdentifiedCommand(command, UUID.randomUUID());
 
         // Act
-        testClient.put()
-                .uri("/orders")
+        testClient.post()
+                .uri("/checkout")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(idCommand)
+                .header("X-RequestId", UUID.randomUUID().toString())
+                .bodyValue(command)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(Boolean.class)

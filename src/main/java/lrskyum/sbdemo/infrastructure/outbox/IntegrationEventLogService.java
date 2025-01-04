@@ -3,8 +3,7 @@ package lrskyum.sbdemo.infrastructure.outbox;
 
 import lrskyum.sbdemo.infrastructure.events.IntegrationEvent;
 import reactor.core.publisher.Flux;
-
-import java.util.List;
+import reactor.core.publisher.Mono;
 
 public interface IntegrationEventLogService {
     Flux<IntegrationEventLogEntry> retrieveEventLogsPendingToPublish();

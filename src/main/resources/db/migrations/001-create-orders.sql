@@ -1,23 +1,18 @@
-create table customer_order
+create table basket
 (
-    id             serial primary key not null,
-    ext_id         uuid unique        not null,
-    description    text               not null,
-    order_date_utc timestamp          not null,
-    order_status   text               not null,
-    buyer_name     text               not null,
-    buyer_email    text,
-    street         text               not null,
-    zip            text               not null,
-    country        text               not null,
-    payment_method text               not null,
-    product        text               not null
+    id              serial primary key not null,
+    ext_id          text unique        not null,
+    basket_date_utc timestamp          not null,
+    basket_status   text               not null,
+    buyer_name      text               not null,
+    payment_method  text               not null,
+    product         text               not null
 );
 
 create table client_request
 (
     id     serial primary key not null,
-    ext_id uuid               not null,
+    ext_id text unique        not null,
     name   varchar(255),
     time   timestamp
 );

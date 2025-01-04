@@ -1,12 +1,12 @@
-package lrskyum.sbdemo.business.aggregates.order;
+package lrskyum.sbdemo.business.aggregates.basket;
 
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Transactional("connectionFactoryTransactionManager")
-public interface OrdersRepository {
-    Flux<CustomerOrder> findAll();
+public interface BasketRepository {
+    Flux<Basket> findAll();
 
-    Mono<CustomerOrder> saveAndEmit(CustomerOrder entity);
+    Mono<Basket> saveAndEmit(Basket entity);
 }

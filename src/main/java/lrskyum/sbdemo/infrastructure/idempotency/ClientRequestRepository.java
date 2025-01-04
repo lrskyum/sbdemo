@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Transactional("connectionFactoryTransactionManager")
 public interface ClientRequestRepository extends ReactiveCrudRepository<ClientRequest, UUID> {
-    Mono<Boolean> existsByExtId(UUID extId);
+    Mono<Boolean> existsByExtId(String extId);
 }

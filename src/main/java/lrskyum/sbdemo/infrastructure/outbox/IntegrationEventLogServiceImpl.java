@@ -44,7 +44,7 @@ public class IntegrationEventLogServiceImpl implements IntegrationEventLogServic
     public void saveEvent(IntegrationEvent event, String topic) {
         try {
             var eventLogEntry = new IntegrationEventLogEntry(event, eventLogObjectMapper.writeValueAsString(event), topic);
-            integrationEventLogRepository.save(eventLogEntry);
+            integrationEventLogRepository.save(eventLogEntry).subscribe();
         } catch (JsonProcessingException e) {
             log.error("Error while creating IntegrationEventLogEntry for {}: ", event.getClass().getSimpleName(), e);
         }
@@ -55,7 +55,7 @@ public class IntegrationEventLogServiceImpl implements IntegrationEventLogServic
         if (EventState.InProgress.equals(eventState))
             eventLogEntry.incrementTimesSent();
 
-        integrationEventLogRepository.save(eventLogEntry);
+        integrationEventLogRepository.save(eventLogEntry).subscribe();
     }
 
     @SneakyThrows

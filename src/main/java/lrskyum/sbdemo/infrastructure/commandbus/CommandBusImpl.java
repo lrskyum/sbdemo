@@ -9,6 +9,8 @@ import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -17,13 +19,15 @@ public class CommandBusImpl implements CommandBus {
     private final Pipeline pipeline;
 
     @Override
-    public <R, C extends Command<R>, IC extends IdentifiedCommand<C, R>> Mono<R> send(IC command) {
+    public <R, C extends Command<R>> R send(C command) {
+        var rnd = UUID.randomUUID().toString();
         var resultMono = requestManager
-                .exist(command.getId())
+                .exist(command instanceof IdentifiedCommand ic ? ic.getId() : rnd)
                 .flatMap(exists -> {
                     if (!exists) {
                         return requestManager
-                                .createRequestForCommand(command.getId(), command.getClass().getSimpleName())
+                                .createRequestForCommand(command instanceof IdentifiedCommand ic ? ic.getId() : rnd,
+                                        command.getClass().getSimpleName())
                                 .flatMap(cr -> Mono.fromCallable(() -> pipeline.send(command)))
                                 .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
                     } else {
@@ -31,6 +35,6 @@ public class CommandBusImpl implements CommandBus {
                                 .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
                     }
                 });
-        return resultMono;
+        return resultMono.block();
     }
 }

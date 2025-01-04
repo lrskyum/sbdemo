@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 public interface RequestManager {
-    Mono<Boolean> exist(UUID id);
+    Mono<Boolean> exist(String id);
 
-    Mono<ClientRequest> createRequestForCommand(UUID id, String commandName);
+    Mono<ClientRequest> createRequestForCommand(String id, String commandName);
 }

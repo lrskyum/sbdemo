@@ -26,7 +26,7 @@ public class RequestManagerTest {
         // Arrange
 
         // Act
-        var exists = requestManager.exist(UUID.randomUUID());
+        var exists = requestManager.exist(UUID.randomUUID().toString());
 
         // Assert
         StepVerifier.create(exists)
@@ -42,7 +42,7 @@ public class RequestManagerTest {
         // Arrange
 
         // Act
-        var exists = requestManager.createRequestForCommand(UUID.randomUUID(), "test");
+        var exists = requestManager.createRequestForCommand(UUID.randomUUID().toString(), "test");
 
         // Assert
         StepVerifier.create(exists)
