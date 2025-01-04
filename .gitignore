@@ -1,7 +1,7 @@
 services/basket-producer/HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
+gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
