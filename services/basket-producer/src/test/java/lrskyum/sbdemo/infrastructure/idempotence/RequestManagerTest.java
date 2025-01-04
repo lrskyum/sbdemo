@@ -1,7 +1,6 @@
 package lrskyum.sbdemo.infrastructure.idempotence;
 
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-//@ActiveProfiles("tempdb")
+@ActiveProfiles("tempdb")
 public class RequestManagerTest {
     @Autowired
     private RequestManager requestManager;
