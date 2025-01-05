@@ -16,13 +16,15 @@ services:
       - "9093:9093"
     healthcheck:
       test: ["CMD", "kafka-topics.sh", "--bootstrap-server=localhost:9092", "--list"]
-      start_period: 15s
-      interval: 10s
+      interval: 3s
+      timeout: 2s
+      retries: 10
     networks:
       - sbdemo
 
   init-kafka:
     image: *kafka-image
+    container_name: kafka-init
     working_dir: /opt/bitnami/kafka/bin
     entrypoint: /bin/bash
     depends_on:
