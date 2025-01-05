@@ -1,7 +1,9 @@
 package lrskyum.sbdemo.ui;
 
-import lrskyum.sbdemo.app.commands.usercheckout.UserCheckoutCommand;
+import lrskyum.sbdemo.app.commands.usercheckout.NewBasketCommand;
+import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import java.time.Duration;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
@@ -37,26 +40,27 @@ public class CommandBasketControllerTest {
     }
 
     @Test
-    public void shouldCheckoutBasket_andSaveIt() {
+    public void shouldCreateBasket_andSaveIt() {
         // Arrange
-        var command = UserCheckoutCommand.builder()
+        var command = NewBasketCommand.builder()
                 .buyerName("John Doe")
                 .product("Product 1")
                 .paymentMethod(PaymentMethod.CASH_ON_DELIVERY)
                 .build();
+        var extId = UUID.randomUUID().toString();
 
         // Act
         testClient.post()
-                .uri("/checkout")
+                .uri("/create")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-RequestId", UUID.randomUUID().toString())
+                .header("X-RequestId", extId)
                 .bodyValue(command)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody()
+                .expectBody(Basket.class)
                 .consumeWith(response -> {
                     // Assert
-                    assertThat(response.getResponseBody()).isNull();
+                    Assertions.assertEquals(extId, response.getResponseBody().getExtId());
                 });
     }
 }

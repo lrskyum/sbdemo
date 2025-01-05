@@ -14,15 +14,15 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class UserCheckoutCommand implements Command<Mono<Void>> {
+public class NewBasketCommand implements Command<Mono<Basket>> {
     private Instant orderDateUtc;
     private BasketStatus basketStatus;
     private String buyerName;
     private PaymentMethod paymentMethod;
     private String product;
 
-    public Basket toBasket(UserCheckoutCommand command) {
-        var id = command instanceof UserCheckoutIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
+    public Basket toBasket(NewBasketCommand command) {
+        var id = command instanceof NewBasketIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
         var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
         return basket;
     }
