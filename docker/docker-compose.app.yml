@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  basket-producer:
+    build:
+      context: ../services/basket-producer
+      dockerfile: Dockerfile
+    image: basket-producer:latest
+    container_name: basket-producer
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL:=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_R2DBC_URL:=r2dbc:postgresql://db:5432/postgres
+      - SPRING_R2DBC_USERNAME=postgres
+      - SPRING_R2DBC_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - sbdemo
+
+networks:
+  sbdemo:
+    driver: bridge

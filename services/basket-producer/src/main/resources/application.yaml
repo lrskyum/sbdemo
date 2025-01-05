@@ -2,13 +2,6 @@ application:
   title: SB demo
   version: v1
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-        exclude: shutdown
-
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
@@ -32,6 +25,15 @@ spring:
           provider_disables_autocommit: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: shutdown
 
 logging:
   level:

@@ -55,6 +55,7 @@ public class CommandBasketControllerTest {
                 .expectStatus().isCreated()
                 .expectBody()
                 .consumeWith(response -> {
+                    // Assert
                     assertThat(response.getResponseBody()).isNull();
                 });
     }
