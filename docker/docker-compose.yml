@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   kafka:
-    image: bitnami/kafka:3.9
+    image: &kafka-image bitnami/kafka:3.9
+    container_name: kafka
     environment:
       KAFKA_CFG_NODE_ID: 0
       KAFKA_CFG_PROCESS_ROLES: controller,broker
@@ -13,9 +14,22 @@ services:
     ports:
       - "9092:9092"
       - "9093:9093"
-    volumes:
-      - ./volumes/kafka/data:/bitnami/kafka/data
-      - ./volumes/kafka/config:/bitnami/kafka/config
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server=localhost:9092", "--list"]
+      start_period: 15s
+      interval: 10s
+    networks:
+      - sbdemo
+
+  init-kafka:
+    image: *kafka-image
+    working_dir: /opt/bitnami/kafka/bin
+    entrypoint: /bin/bash
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: |
+      kafka-topics.sh --create --if-not-exists --topic basket --replication-factor=1 --partitions=3 --bootstrap-server kafka:9092
     networks:
       - sbdemo
 
