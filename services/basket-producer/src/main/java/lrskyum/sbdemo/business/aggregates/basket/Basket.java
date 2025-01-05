@@ -4,7 +4,7 @@ package lrskyum.sbdemo.business.aggregates.basket;
 import lombok.Builder;
 import lombok.Getter;
 import lrskyum.sbdemo.business.base.AggregateRoot;
-import lrskyum.sbdemo.business.events.BasketCheckedOutDomainEvent;
+import lrskyum.sbdemo.business.events.newbasket.NewBasketDomainEvent;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
@@ -41,7 +41,7 @@ public class Basket extends AggregateRoot {
     }
 
     private void addBasketCheckedOutDomainEvent(Basket order) {
-        var orderStartedDomainEvent = new BasketCheckedOutDomainEvent(this);
+        var orderStartedDomainEvent = new NewBasketDomainEvent(this);
         addDomainEvent(orderStartedDomainEvent);
     }
 }

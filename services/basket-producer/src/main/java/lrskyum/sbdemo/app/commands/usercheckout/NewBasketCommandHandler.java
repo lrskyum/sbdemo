@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -26,7 +28,8 @@ public class NewBasketCommandHandler implements Command.Handler<NewBasketCommand
                 command.getPaymentMethod(), command.getProduct());
         outboxService.saveEvent(integrationEvent, "basket");
 
-        final var basket = command.toBasket(command);
+        var id = command instanceof NewBasketIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
+        final var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
         return basketRepository.saveAndEmit(basket);
     }
 }

@@ -33,16 +33,16 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
     }
 
     public Mono<Void> initializeData() {
-        return initializeOrders().then(initializeClientRequests());
+        return initializeBaskets().then(initializeClientRequests());
     }
 
-    public Mono<Void> initializeOrders() {
-        var tempOrders = IntStream.range(0, 10).mapToObj(this::createOrder).toList();
-        var ordersFlux = Flux.fromIterable(tempOrders).flatMap(basketRepository::saveAndEmit).then();
-        return ordersFlux;
+    public Mono<Void> initializeBaskets() {
+        var tempBaskets = IntStream.range(0, 10).mapToObj(this::createBasket).toList();
+        var basketsFlux = Flux.fromIterable(tempBaskets).flatMap(basketRepository::saveAndEmit).then();
+        return basketsFlux;
     }
 
-    private Basket createOrder(int i) {
+    private Basket createBasket(int i) {
         return Basket.create("John Doe " + i, PaymentMethod.CREDIT_CARD, "Product " + i);
     }
 
