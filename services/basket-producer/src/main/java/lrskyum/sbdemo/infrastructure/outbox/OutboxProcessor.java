@@ -10,16 +10,16 @@ import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 @Configuration
-public class IntegrationEventProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(IntegrationEventProcessor.class);
+public class OutboxProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(OutboxProcessor.class);
 
-    private final IntegrationEventLogService integrationEventLogService;
-    private final IntegrationEventPublisher integrationEventPublisher;
+    private final OutboxService outboxService;
+    private final OutboxPublisher outboxPublisher;
 
     @Scheduled(fixedDelay = 2000)
     @SchedulerLock(name = "IntegrationEventProcessorLock")
     public void process() {
-        var db = integrationEventLogService.retrieveEventLogsPendingToPublish();
+        var db = outboxService.retrieveEventLogsPendingToPublish();
         db.hasElements().flatMapMany(hasElements -> {
             if (hasElements) {
                 logger.info("integration events are ready to be published");
@@ -31,9 +31,9 @@ public class IntegrationEventProcessor {
         }).subscribe();
     }
 
-    private void publish(IntegrationEventLogEntry eventLogEntry) {
-        integrationEventLogService.markEventAsInProgress(eventLogEntry);
-        integrationEventPublisher.publish(eventLogEntry);
-        integrationEventLogService.markEventAsPublished(eventLogEntry);
+    private void publish(OutboxEntry eventLogEntry) {
+        outboxService.markEventAsInProgress(eventLogEntry);
+        outboxPublisher.publish(eventLogEntry);
+        outboxService.markEventAsPublished(eventLogEntry);
     }
 }

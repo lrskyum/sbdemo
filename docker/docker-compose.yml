@@ -22,7 +22,7 @@ services:
     networks:
       - sbdemo
 
-  init-kafka:
+  kafka-init:
     image: *kafka-image
     container_name: kafka-init
     working_dir: /opt/bitnami/kafka/bin

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IntegrationEventLogEntry {
+public class OutboxEntry {
     @Id
     @Getter(AccessLevel.PRIVATE)
     private Long id;
@@ -33,7 +33,7 @@ public class IntegrationEventLogEntry {
     @Setter(AccessLevel.PUBLIC)
     private IntegrationEvent event;
 
-    IntegrationEventLogEntry(IntegrationEvent event, String content, String topic) {
+    OutboxEntry(IntegrationEvent event, String content, String topic) {
         eventId = event.getId();
         creationTime = Instant.now();
         eventTypeName = event.getClass().getName();

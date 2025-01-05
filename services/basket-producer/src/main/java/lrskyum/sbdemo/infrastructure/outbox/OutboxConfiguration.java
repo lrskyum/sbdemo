@@ -18,13 +18,13 @@ import javax.sql.DataSource;
 public class OutboxConfiguration {
 
     @Bean
-    public IntegrationEventLogService integrationEventLogService(IntegrationEventLogRepository integrationEventLogRepository) {
-        return new IntegrationEventLogServiceImpl(eventLogObjectMapper(), integrationEventLogRepository);
+    public OutboxService integrationEventLogService(OutboxRepository outboxRepository) {
+        return new OutboxServiceImpl(eventLogObjectMapper(), outboxRepository);
     }
 
     @Bean
-    IntegrationEventProcessor integrationEventProcessor(IntegrationEventLogService integrationEventLogService, IntegrationEventPublisher integrationEventPublisher) {
-        return new IntegrationEventProcessor(integrationEventLogService, integrationEventPublisher);
+    OutboxProcessor integrationEventProcessor(OutboxService outboxService, OutboxPublisher outboxPublisher) {
+        return new OutboxProcessor(outboxService, outboxPublisher);
     }
 
     @Bean

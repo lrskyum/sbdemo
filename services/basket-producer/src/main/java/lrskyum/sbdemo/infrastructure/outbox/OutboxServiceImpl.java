@@ -10,14 +10,14 @@ import reactor.core.publisher.Flux;
 
 @Slf4j
 @RequiredArgsConstructor
-public class IntegrationEventLogServiceImpl implements IntegrationEventLogService {
+public class OutboxServiceImpl implements OutboxService {
 
     private final ObjectMapper eventLogObjectMapper;
-    private final IntegrationEventLogRepository integrationEventLogRepository;
+    private final OutboxRepository outboxRepository;
 
     @Override
-    public Flux<IntegrationEventLogEntry> retrieveEventLogsPendingToPublish() {
-        return integrationEventLogRepository.findAll()
+    public Flux<OutboxEntry> retrieveEventLogsPendingToPublish() {
+        return outboxRepository.findAll()
                 .filter(eventLogEntry -> EventState.NotPublished.equals(eventLogEntry.getEventState()))
                 .map(eventLogEntry -> {
                     eventLogEntry.setEvent(deserialize(eventLogEntry));
@@ -26,40 +26,40 @@ public class IntegrationEventLogServiceImpl implements IntegrationEventLogServic
     }
 
     @Override
-    public void markEventAsInProgress(IntegrationEventLogEntry eventLogEntry) {
+    public void markEventAsInProgress(OutboxEntry eventLogEntry) {
         updateEventStatus(eventLogEntry, EventState.InProgress);
     }
 
     @Override
-    public void markEventAsPublished(IntegrationEventLogEntry eventLogEntry) {
+    public void markEventAsPublished(OutboxEntry eventLogEntry) {
         updateEventStatus(eventLogEntry, EventState.Published);
     }
 
     @Override
-    public void markEventAsFailed(IntegrationEventLogEntry eventLogEntry) {
+    public void markEventAsFailed(OutboxEntry eventLogEntry) {
         updateEventStatus(eventLogEntry, EventState.PublishedFailed);
     }
 
     @Override
     public void saveEvent(IntegrationEvent event, String topic) {
         try {
-            var eventLogEntry = new IntegrationEventLogEntry(event, eventLogObjectMapper.writeValueAsString(event), topic);
-            integrationEventLogRepository.save(eventLogEntry).subscribe();
+            var eventLogEntry = new OutboxEntry(event, eventLogObjectMapper.writeValueAsString(event), topic);
+            outboxRepository.save(eventLogEntry).subscribe();
         } catch (JsonProcessingException e) {
             log.error("Error while creating IntegrationEventLogEntry for {}: ", event.getClass().getSimpleName(), e);
         }
     }
 
-    private void updateEventStatus(IntegrationEventLogEntry eventLogEntry, EventState eventState) {
+    private void updateEventStatus(OutboxEntry eventLogEntry, EventState eventState) {
         eventLogEntry.setEventState(eventState);
         if (EventState.InProgress.equals(eventState))
             eventLogEntry.incrementTimesSent();
 
-        integrationEventLogRepository.save(eventLogEntry).subscribe();
+        outboxRepository.save(eventLogEntry).subscribe();
     }
 
     @SneakyThrows
-    private IntegrationEvent deserialize(IntegrationEventLogEntry eventLogEntry) {
+    private IntegrationEvent deserialize(OutboxEntry eventLogEntry) {
         var x = eventLogObjectMapper.readValue(eventLogEntry.getContent(), Class.forName(eventLogEntry.getEventTypeName()));
         return (IntegrationEvent) x;
     }
