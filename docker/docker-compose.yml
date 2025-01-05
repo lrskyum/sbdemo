@@ -13,6 +13,8 @@ services:
     volumes:
       - ./volumes/kafka/data:/bitnami/kafka/data
       - ./volumes/kafka/config:/bitnami/kafka/config
+    networks:
+      - sbdemo
 
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
@@ -25,7 +27,46 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     depends_on:
       - kafka
+    networks:
+      - sbdemo
+
+  db:
+    image: postgres
+    container_name: postgres
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - sbdemo
+
+  basket-producer:
+    build:
+      context: ../services/basket-producer
+      dockerfile: Dockerfile
+    image: basket-producer:latest
+    container_name: basket-producer
+    environment:
+      - SPRING_DATASOURCE_URL:=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_R2DBC_URL:=r2dbc:postgresql://db:5432/postgres
+      - SPRING_R2DBC_USERNAME=postgres
+      - SPRING_R2DBC_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - sbdemo
 
 volumes:
   kafka_data:
     driver: local
+
+networks:
+  sbdemo:
+    driver: bridge
