@@ -60,7 +60,11 @@ public class CommandBasketControllerTest {
                 .expectBody(Basket.class)
                 .consumeWith(response -> {
                     // Assert
-                    Assertions.assertEquals(extId, response.getResponseBody().getExtId());
+                    Basket basket = response.getResponseBody();
+                    Assertions.assertEquals(extId, basket.getExtId());
+                    Assertions.assertEquals("John Doe", basket.getBuyerName());
+                    Assertions.assertEquals("Product 1", basket.getProduct());
+                    Assertions.assertEquals(PaymentMethod.CASH_ON_DELIVERY, basket.getPaymentMethod());
                 });
     }
 }
