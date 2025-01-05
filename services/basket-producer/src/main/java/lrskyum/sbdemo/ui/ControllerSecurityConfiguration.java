@@ -22,11 +22,7 @@ public class ControllerSecurityConfiguration {
                         requests.requestMatchers("/**")
                                 .permitAll()
                                 .anyRequest()
-                                .authenticated())
-                .formLogin((form) ->
-                        form.loginPage("/login")
-                                .permitAll())
-                .logout(LogoutConfigurer::permitAll);
+                                .authenticated());
 
         return http.build();
     }

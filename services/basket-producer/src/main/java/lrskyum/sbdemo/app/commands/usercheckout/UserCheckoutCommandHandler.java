@@ -28,15 +28,10 @@ public class UserCheckoutCommandHandler implements Command.Handler<UserCheckoutC
                 command.getPaymentMethod(), command.getProduct());
         integrationEventLogService.saveEvent(integrationEvent, "basket");
 
-        final var basket = createBasket(command);
+        final var basket = command.toBasket(command);
         basketRepository.saveAndEmit(basket).subscribe();
 
         return Mono.empty();
     }
 
-    private Basket createBasket(UserCheckoutCommand command) {
-        var id = command instanceof UserCheckoutIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
-        var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
-        return basket;
-    }
 }

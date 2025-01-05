@@ -7,7 +7,6 @@ import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import lrskyum.sbdemo.infrastructure.commandbus.CommandBus;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +36,7 @@ public class BasketController {
     @PostMapping(value = "/checkout")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> checkout(@RequestBody UserCheckoutCommand command,
-                                  @RequestHeader(value = "X-RequestId", required = false) String requestId) {
+                               @RequestHeader(value = "X-RequestId", required = false) String requestId) {
         if (requestId != null) {
             command = new UserCheckoutIdentifiedCommand(command, requestId);
         }
