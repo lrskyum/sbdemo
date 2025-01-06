@@ -1,6 +1,7 @@
 package lrskyum.sbdemo.infrastructure.outbox;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,25 +11,24 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class OutboxProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(OutboxProcessor.class);
-
     private final OutboxService outboxService;
     private final OutboxPublisher outboxPublisher;
 
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 5000)
     @SchedulerLock(name = "IntegrationEventProcessorLock")
     @Transactional("connectionFactoryTransactionManager")
     public Flux<?> process() {
         var db = outboxService.retrieveEventLogsPendingToPublish();
         return db.hasElements().flatMapMany(hasElements -> {
             if (hasElements) {
-                logger.info("integration events are ready to be published");
+                log.info("integration events are ready to be published");
                 return db.doOnNext(this::publish);
             } else {
-                logger.info("No integration events found to publish");
+                log.info("No integration events found to publish");
                 return Flux.empty();
             }
         });
