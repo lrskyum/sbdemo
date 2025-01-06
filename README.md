@@ -38,10 +38,15 @@ functionality. Events also increase observability and provide a natural point fo
 Integration events are sent through Kafka that scales well and also ensures durability and availability.
 
 
+# The Clean Architecture
+
+The Clean architecture as it should be:
 
 ![Clean Architecture](docs/images/clean-architecture.png)
 
+# Sequence Diagram for this 
 
+A sequence digram for this application:
 
 ![Sequence Diagram](docs/images/sequence.png)
 
