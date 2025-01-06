@@ -1,8 +1,8 @@
 package lrskyum.sbdemo.ui;
 
 import lombok.RequiredArgsConstructor;
-import lrskyum.sbdemo.app.commands.usercheckout.NewBasketCommand;
-import lrskyum.sbdemo.app.commands.usercheckout.NewBasketIdentifiedCommand;
+import lrskyum.sbdemo.app.commands.newbasket.NewBasketCommand;
+import lrskyum.sbdemo.app.commands.newbasket.NewBasketIdentifiedCommand;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import lrskyum.sbdemo.infrastructure.commandbus.CommandBus;
@@ -33,7 +33,7 @@ public class BasketController {
         return basketRepository.findAll();
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/basket/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Basket> checkout(@RequestBody NewBasketCommand command,
                                @RequestHeader(value = "X-RequestId", required = false) String requestId) {

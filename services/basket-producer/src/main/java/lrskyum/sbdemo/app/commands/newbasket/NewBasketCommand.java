@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.app.commands.usercheckout;
+package lrskyum.sbdemo.app.commands.newbasket;
 
 import an.awesome.pipelinr.Command;
 import lombok.Builder;

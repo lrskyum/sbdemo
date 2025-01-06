@@ -1,6 +1,6 @@
 package lrskyum.sbdemo.ui;
 
-import lrskyum.sbdemo.app.commands.usercheckout.NewBasketCommand;
+import lrskyum.sbdemo.app.commands.newbasket.NewBasketCommand;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
 import org.junit.jupiter.api.Assertions;
@@ -51,7 +51,7 @@ public class CommandBasketControllerTest {
 
         // Act
         testClient.post()
-                .uri("/create")
+                .uri("/basket/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("X-RequestId", extId)
                 .bodyValue(command)
