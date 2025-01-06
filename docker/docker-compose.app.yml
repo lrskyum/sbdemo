@@ -8,11 +8,11 @@ services:
     image: basket-producer:latest
     container_name: basket-producer
     environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9094
-      - SPRING_DATASOURCE_URL:=jdbc:postgresql://db:5432/postgres
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9094
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_R2DBC_URL:=r2dbc:postgresql://db:5432/postgres
+      - SPRING_R2DBC_URL=r2dbc:postgresql://db:5432/postgres
       - SPRING_R2DBC_USERNAME=postgres
       - SPRING_R2DBC_PASSWORD=postgres
     ports:
