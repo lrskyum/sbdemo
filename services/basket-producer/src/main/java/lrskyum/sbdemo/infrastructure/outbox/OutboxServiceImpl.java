@@ -17,18 +17,18 @@ public class OutboxServiceImpl implements OutboxService {
     private final OutboxRepository outboxRepository;
 
     @Override
-    public Flux<OutboxEntry> retrieveEventLogsPendingToPublish() {
+    public Flux<OutboxEntry> retrieveOutboxEntriesPendingToPublish() {
         return outboxRepository.findAll()
-                .filter(eventLogEntry -> EventState.NotPublished.equals(eventLogEntry.getEventState()))
-                .map(eventLogEntry -> {
-                    eventLogEntry.setEvent(deserialize(eventLogEntry));
-                    return eventLogEntry;
+                .filter(outboxEntry -> EventState.NotPublished.equals(outboxEntry.getEventState()))
+                .map(outboxEntry -> {
+                    outboxEntry.setEvent(deserialize(outboxEntry));
+                    return outboxEntry;
                 });
     }
 
     @Override
-    public void markEventAsInProgress(OutboxEntry eventLogEntry) {
-        updateEventStatus(eventLogEntry, EventState.InProgress);
+    public void markEventAsInProgress(OutboxEntry outboxEntry) {
+        updateEventStatus(outboxEntry, EventState.InProgress);
     }
 
     @Override

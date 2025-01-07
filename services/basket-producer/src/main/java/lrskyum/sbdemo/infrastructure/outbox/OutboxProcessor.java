@@ -20,7 +20,7 @@ public class OutboxProcessor {
     @SchedulerLock(name = "IntegrationEventProcessorLock")
     @Transactional("connectionFactoryTransactionManager")
     public Flux<?> process() {
-        var db = outboxService.retrieveEventLogsPendingToPublish();
+        var db = outboxService.retrieveOutboxEntriesPendingToPublish();
         return db.hasElements().flatMapMany(hasElements -> {
             if (hasElements) {
                 log.info("integration events are ready to be published");

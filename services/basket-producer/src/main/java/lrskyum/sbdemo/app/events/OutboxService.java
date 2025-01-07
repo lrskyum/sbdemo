@@ -5,7 +5,7 @@ import lrskyum.sbdemo.infrastructure.outbox.OutboxEntry;
 import reactor.core.publisher.Flux;
 
 public interface OutboxService {
-    Flux<OutboxEntry> retrieveEventLogsPendingToPublish();
+    Flux<OutboxEntry> retrieveOutboxEntriesPendingToPublish();
 
     void markEventAsInProgress(OutboxEntry eventLogEntry);
 
