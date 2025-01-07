@@ -38,7 +38,7 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     public Mono<Void> initializeBaskets() {
         var tempBaskets = IntStream.range(0, 10).mapToObj(this::createBasket).toList();
-        var basketsFlux = Flux.fromIterable(tempBaskets).flatMap(basketRepository::saveAndEmit).then();
+        var basketsFlux = Flux.fromIterable(tempBaskets).flatMap(basketRepository::save).then();
         return basketsFlux;
     }
 

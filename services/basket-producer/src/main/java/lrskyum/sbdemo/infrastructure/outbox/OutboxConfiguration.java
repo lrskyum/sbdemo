@@ -2,6 +2,7 @@ package lrskyum.sbdemo.infrastructure.outbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lrskyum.sbdemo.app.events.OutboxService;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;

@@ -1,7 +1,8 @@
-package lrskyum.sbdemo.infrastructure.events;
+package lrskyum.sbdemo.app.events.newbasket;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lrskyum.sbdemo.app.events.IntegrationEvent;
 import lrskyum.sbdemo.business.aggregates.basket.BasketStatus;
 import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
 

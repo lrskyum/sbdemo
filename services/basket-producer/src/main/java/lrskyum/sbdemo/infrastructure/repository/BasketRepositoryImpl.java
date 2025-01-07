@@ -27,7 +27,7 @@ public class BasketRepositoryImpl implements BasketRepository {
     }
 
     @Override
-    public Mono<Basket> saveAndEmit(Basket entity) {
+    public Mono<Basket> save(Basket entity) {
         return delegate.save(entity)
                 .doOnNext(e -> {
                     entity.domainEvents().forEach(applicationEventPublisher::publishEvent);

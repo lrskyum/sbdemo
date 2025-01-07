@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono;
 public interface BasketRepository extends Repository<Basket>{
     Flux<Basket> findAll();
 
-    Mono<Basket> saveAndEmit(Basket entity);
+    Mono<Basket> save(Basket entity);
 }

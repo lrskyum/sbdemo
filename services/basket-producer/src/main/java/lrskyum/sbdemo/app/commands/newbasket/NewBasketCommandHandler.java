@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
-import lrskyum.sbdemo.infrastructure.events.NewBasketIntegrationEvent;
-import lrskyum.sbdemo.infrastructure.outbox.OutboxService;
+import lrskyum.sbdemo.app.events.newbasket.NewBasketIntegrationEvent;
+import lrskyum.sbdemo.app.events.OutboxService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -30,6 +30,6 @@ public class NewBasketCommandHandler implements Command.Handler<NewBasketCommand
 
         var id = command instanceof NewBasketIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
         final var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
-        return basketRepository.saveAndEmit(basket);
+        return basketRepository.save(basket);
     }
 }

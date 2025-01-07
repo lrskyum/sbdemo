@@ -1,7 +1,7 @@
-package lrskyum.sbdemo.infrastructure.outbox;
+package lrskyum.sbdemo.app.events;
 
 
-import lrskyum.sbdemo.infrastructure.events.IntegrationEvent;
+import lrskyum.sbdemo.infrastructure.outbox.OutboxEntry;
 import reactor.core.publisher.Flux;
 
 public interface OutboxService {
