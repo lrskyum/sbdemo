@@ -2,7 +2,6 @@ package lrskyum.sbdemo.ui;
 
 import lombok.RequiredArgsConstructor;
 import lrskyum.sbdemo.app.commands.newbasket.NewBasketCommand;
-import lrskyum.sbdemo.app.commands.newbasket.NewBasketIdentifiedCommand;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import lrskyum.sbdemo.infrastructure.commandbus.CommandBus;
@@ -35,10 +34,15 @@ public class BasketController {
 
     @PostMapping(value = "/basket/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Basket> checkout(@RequestBody NewBasketCommand command,
-                                 @RequestHeader(value = "X-RequestId", required = false) String requestId) {
+    public Mono<Basket> create(@RequestBody NewBasketCommand command,
+                               @RequestHeader(value = "X-RequestId", required = false) String requestId) {
         if (requestId != null) {
-            command = new NewBasketIdentifiedCommand(command, requestId);
+            command = NewBasketCommand.builder()
+                    .buyerName(command.getBuyerName())
+                    .paymentMethod(command.getPaymentMethod())
+                    .product(command.getProduct())
+                    .id(requestId)
+                    .build();
         }
         return commandBus.send(command);
     }

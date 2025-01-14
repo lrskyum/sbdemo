@@ -3,10 +3,10 @@ package lrskyum.sbdemo.app.commands.newbasket;
 import an.awesome.pipelinr.Command;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lrskyum.sbdemo.app.events.OutboxService;
+import lrskyum.sbdemo.app.events.newbasket.NewBasketIntegrationEvent;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
-import lrskyum.sbdemo.app.events.newbasket.NewBasketIntegrationEvent;
-import lrskyum.sbdemo.app.events.OutboxService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -24,12 +24,13 @@ public class NewBasketCommandHandler implements Command.Handler<NewBasketCommand
     @Override
     @Transactional("connectionFactoryTransactionManager")
     public Mono<Basket> handle(NewBasketCommand command) {
-        var integrationEvent = new NewBasketIntegrationEvent(command.getBasketStatus(), command.getBuyerName(),
+        final var id = command.getId() != null ? command.getId() : UUID.randomUUID().toString();
+        final var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
+
+        final var integrationEvent = new NewBasketIntegrationEvent(basket.getBasketStatus(), command.getBuyerName(),
                 command.getPaymentMethod(), command.getProduct());
         outboxService.saveEvent(integrationEvent, "basket");
 
-        var id = command instanceof NewBasketIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
-        final var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
         return basketRepository.save(basket);
     }
 }

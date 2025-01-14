@@ -3,6 +3,7 @@ package lrskyum.sbdemo.app.commands.newbasket;
 import an.awesome.pipelinr.Command;
 import lombok.Builder;
 import lombok.Getter;
+import lrskyum.sbdemo.app.commands.IdentifiedCommand;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketStatus;
 import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
@@ -13,17 +14,16 @@ import java.util.UUID;
 
 
 @Getter
-@Builder
-public class NewBasketCommand implements Command<Mono<Basket>> {
-    private Instant orderDateUtc;
-    private BasketStatus basketStatus;
-    private String buyerName;
-    private PaymentMethod paymentMethod;
-    private String product;
+public class NewBasketCommand extends IdentifiedCommand<Mono<Basket>> {
+    private final String buyerName;
+    private final PaymentMethod paymentMethod;
+    private final String product;
 
-    public Basket toBasket(NewBasketCommand command) {
-        var id = command instanceof NewBasketIdentifiedCommand ic ? ic.getId() : UUID.randomUUID().toString();
-        var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
-        return basket;
+    @Builder
+    public NewBasketCommand(String id, String buyerName, PaymentMethod paymentMethod, String product) {
+        super(id);
+        this.buyerName = buyerName;
+        this.paymentMethod = paymentMethod;
+        this.product = product;
     }
 }

@@ -23,10 +23,10 @@ public class RequestManagerImpl implements RequestManager {
     public Mono<ClientRequest> createRequestForCommand(String id, String commandName) {
         return exist(id)
                 .flatMap(exists -> {
-                    if (exists)
+                    if (exists) {
                         return Mono.error(new BasketDomainException("Request with id: %s already exists".formatted(id)));
-                    else {
-                        var cr = new ClientRequest.ClientRequestBuilder()
+                    } else {
+                        var cr = ClientRequest.builder()
                                 .extId(id)
                                 .name(commandName)
                                 .time(Instant.now())
