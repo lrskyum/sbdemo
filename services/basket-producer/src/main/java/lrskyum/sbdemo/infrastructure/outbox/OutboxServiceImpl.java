@@ -51,12 +51,12 @@ public class OutboxServiceImpl implements OutboxService {
         }
     }
 
-    private void updateEventStatus(OutboxEntry eventLogEntry, EventState eventState) {
-        eventLogEntry.setEventState(eventState);
+    private void updateEventStatus(OutboxEntry outboxEntry, EventState eventState) {
+        outboxEntry.setEventState(eventState);
         if (EventState.InProgress.equals(eventState))
-            eventLogEntry.incrementTimesSent();
+            outboxEntry.incrementTimesSent();
 
-        outboxRepository.save(eventLogEntry).subscribe();
+        outboxRepository.save(outboxEntry).subscribe();
     }
 
     @SneakyThrows

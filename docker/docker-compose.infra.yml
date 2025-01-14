@@ -17,7 +17,7 @@ services:
       - "9093:9093"
       - "9094:9094"
     healthcheck:
-      test: ["CMD", "kafka-topics.sh", "--bootstrap-server=localhost:9094", "--list"]
+      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server=localhost:9094", "--list" ]
       interval: 3s
       timeout: 2s
       retries: 10
