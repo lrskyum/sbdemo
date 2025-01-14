@@ -24,14 +24,14 @@ public class CommandBusImpl implements CommandBus {
         var resultMono = requestManager
                 .exist(command instanceof IdentifiedCommand ic ? ic.getId() : rnd)
                 .flatMap(exists -> {
-                    if (!exists) {
+                    if (exists) {
+                        return Mono.fromCallable(() -> pipeline.send(command))
+                                .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
+                    } else {
                         return requestManager
                                 .createRequestForCommand(command instanceof IdentifiedCommand ic ? ic.getId() : rnd,
                                         command.getClass().getSimpleName())
                                 .flatMap(cr -> Mono.fromCallable(() -> pipeline.send(command)))
-                                .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
-                    } else {
-                        return Mono.fromCallable(() -> pipeline.send(command))
                                 .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
                     }
                 });
