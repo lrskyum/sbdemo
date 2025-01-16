@@ -50,9 +50,9 @@ public class QueryBasketControllerTest {
                     assertNotNull(basket);
                     assertFalse(basket.isEmpty(), "Expected at least 10 elements, but found " + basket.size());
 
-                    basket.forEach(order -> {
-                        assertNotNull(order.getBasketStatus());
-                        assertNotNull(order.getBasketDateUtc());
+                    basket.forEach(b -> {
+                        assertNotNull(b.getBasketStatus());
+                        assertNotNull(b.getBasketDateUtc());
                     });
                 });
     }

@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("tempdb")
-class CustomerBasketRepositoryTest {
+class QueryCustomerBasketRepositoryTest {
 
     @Autowired
     private BasketRepository basketRepository;
@@ -32,7 +32,7 @@ class CustomerBasketRepositoryTest {
         // Assert
         StepVerifier.create(orders.collectList())
                 .expectSubscription()
-                .assertNext(list -> assertThat(list.size()).isGreaterThanOrEqualTo(10)) // Check size
+                .assertNext(list -> assertThat(list.size()).isGreaterThanOrEqualTo(10))
                 .expectComplete()
                 .verify();
     }
