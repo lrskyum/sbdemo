@@ -41,12 +41,29 @@ services:
     image: provectuslabs/kafka-ui:v0.7.2
     container_name: kafka-ui
     ports:
-      - "10092:8080"
+      - "10092:8081"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9094
+      SERVER_PORT: 8081
     depends_on:
       - kafka
+    networks:
+      - sbdemo
+
+  keycloak:
+    build:
+      context: ./keycloak
+      args:
+        KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      dockerfile: Dockerfile
+    image: keycloak:latest
+    container_name: keycloak
+    depends_on:
+      - db
+    ports:
+      - "18080:8080"
+      - "18443:8443"
     networks:
       - sbdemo
 
@@ -60,6 +77,8 @@ services:
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - "./postgres/initdb.d:/docker-entrypoint-initdb.d"
     networks:
       - sbdemo
 
