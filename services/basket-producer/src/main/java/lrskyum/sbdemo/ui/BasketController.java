@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,14 +28,14 @@ public class BasketController {
 
     @GetMapping("/basket")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Basket> getAllBaskets() {
+    public List<Basket> getAllBaskets() {
         return basketRepository.findAll();
     }
 
     @PostMapping(value = "/basket/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Basket> create(@RequestBody NewBasketCommand command,
-                               @RequestHeader(value = "X-RequestId", required = false) String requestId) {
+    public Basket create(@RequestBody NewBasketCommand command,
+                         @RequestHeader(value = "X-RequestId", required = false) String requestId) {
         if (requestId != null) {
             command = NewBasketCommand.builder()
                     .buyerName(command.getBuyerName())

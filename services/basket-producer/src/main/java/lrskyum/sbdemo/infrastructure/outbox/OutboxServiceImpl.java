@@ -7,7 +7,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.app.events.IntegrationEvent;
 import lrskyum.sbdemo.app.events.OutboxService;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,13 +18,15 @@ public class OutboxServiceImpl implements OutboxService {
     private final OutboxRepository outboxRepository;
 
     @Override
-    public Flux<OutboxEntry> retrieveOutboxEntriesPendingToPublish() {
+    public List<OutboxEntry> retrieveOutboxEntriesPendingToPublish() {
         return outboxRepository.findAll()
+                .stream()
                 .filter(outboxEntry -> EventState.NotPublished.equals(outboxEntry.getEventState()))
                 .map(outboxEntry -> {
                     outboxEntry.setEvent(deserialize(outboxEntry));
                     return outboxEntry;
-                });
+                })
+                .toList();
     }
 
     @Override
@@ -45,7 +48,7 @@ public class OutboxServiceImpl implements OutboxService {
     public void saveEvent(IntegrationEvent event, String topic) {
         try {
             var eventLogEntry = new OutboxEntry(event, eventLogObjectMapper.writeValueAsString(event), topic);
-            outboxRepository.save(eventLogEntry).subscribe();
+            outboxRepository.save(eventLogEntry);
         } catch (JsonProcessingException e) {
             log.error("Error while creating IntegrationEventLogEntry for {}: ", event.getClass().getSimpleName(), e);
         }
@@ -56,7 +59,7 @@ public class OutboxServiceImpl implements OutboxService {
         if (EventState.InProgress.equals(eventState))
             outboxEntry.incrementTimesSent();
 
-        outboxRepository.save(outboxEntry).subscribe();
+        outboxRepository.save(outboxEntry);
     }
 
     @SneakyThrows

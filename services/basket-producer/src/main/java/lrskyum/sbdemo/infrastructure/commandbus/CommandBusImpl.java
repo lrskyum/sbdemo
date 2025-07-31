@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import lrskyum.sbdemo.app.commands.IdentifiedCommand;
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,20 +16,17 @@ public class CommandBusImpl implements CommandBus {
 
     @Override
     public <R, C extends IdentifiedCommand<R>> R send(C command) {
-        final var id = command.getId();
-        var resultMono = requestManager
-                .exist(id)
-                .flatMap(exists -> {
-                    if (exists) {
-                        return Mono.fromCallable(() -> pipeline.send(command))
-                                .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
-                    } else {
-                        return requestManager
-                                .createRequestForCommand(id, command.getClass().getSimpleName())
-                                .map(cr -> pipeline.send(command))
-                                .doOnError(e -> log.error("Error executing command: {}", command.getClass().getSimpleName(), e));
-                    }
-                });
-        return resultMono.block();
+        try {
+            final var id = command.getId();
+            if (requestManager.exist(id)) {
+                return pipeline.send(command);
+            } else {
+                requestManager.createRequestForCommand(id, command.getClass().getSimpleName());
+                return pipeline.send(command);
+            }
+        } catch (Exception e) {
+            log.error("Error executing command: {}", command.getClass().getSimpleName(), e);
+            throw e; // Re-throw the exception to indicate failure
+        }
     }
 }

@@ -1,12 +1,11 @@
 package lrskyum.sbdemo.infrastructure.idempotency;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
-@Transactional("connectionFactoryTransactionManager")
-public interface ClientRequestRepository extends ReactiveCrudRepository<ClientRequest, UUID> {
-    Mono<Boolean> existsByExtId(String extId);
+@Transactional
+public interface ClientRequestRepository extends CrudRepository<ClientRequest, UUID> {
+    Boolean existsByExtId(String extId);
 }

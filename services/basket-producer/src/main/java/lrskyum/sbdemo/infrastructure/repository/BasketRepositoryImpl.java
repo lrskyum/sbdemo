@@ -1,16 +1,14 @@
 package lrskyum.sbdemo.infrastructure.repository;
 
-import lombok.RequiredArgsConstructor;
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -22,19 +20,18 @@ public class BasketRepositoryImpl implements BasketRepository {
     @Autowired
     private BasketRepo delegate;
 
-    public Flux<Basket> findAll() {
+    public List<Basket> findAll() {
         return delegate.findAll();
     }
 
     @Override
-    public Mono<Basket> save(Basket entity) {
-        return delegate.save(entity)
-                .doOnNext(e -> {
-                    entity.domainEvents().forEach(applicationEventPublisher::publishEvent);
-                    entity.clearDomainEvents();
-                });
+    public Basket save(Basket entity) {
+        var e = delegate.save(entity);
+        entity.domainEvents().forEach(applicationEventPublisher::publishEvent);
+        entity.clearDomainEvents();
+        return e;
     }
 }
 
-interface BasketRepo extends ReactiveCrudRepository<Basket, UUID> {
+interface BasketRepo extends ListCrudRepository<Basket, UUID> {
 }

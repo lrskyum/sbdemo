@@ -9,21 +9,20 @@ import lrskyum.sbdemo.business.aggregates.basket.Basket;
 import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 @Slf4j
 @AllArgsConstructor
 @Service
-public class NewBasketCommandHandler implements Command.Handler<NewBasketCommand, Mono<Basket>> {
+public class NewBasketCommandHandler implements Command.Handler<NewBasketCommand, Basket> {
 
     private final BasketRepository basketRepository;
     private final OutboxService outboxService;
 
     @Override
-    @Transactional("connectionFactoryTransactionManager")
-    public Mono<Basket> handle(NewBasketCommand command) {
+    @Transactional
+    public Basket handle(NewBasketCommand command) {
         final var id = command.getId() != null ? command.getId() : UUID.randomUUID().toString();
         final var basket = Basket.create(id, command.getBuyerName(), command.getPaymentMethod(), command.getProduct());
 

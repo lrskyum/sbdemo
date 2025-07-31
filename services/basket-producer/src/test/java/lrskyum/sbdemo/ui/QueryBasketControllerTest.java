@@ -1,18 +1,21 @@
 package lrskyum.sbdemo.ui;
 
 import lrskyum.sbdemo.business.aggregates.basket.Basket;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,40 +24,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles("tempdb")
 public class QueryBasketControllerTest {
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
     @LocalServerPort
     private int port;
 
-    private WebTestClient testClient;
-
-    @BeforeEach
-    public void setup() {
-        testClient = WebTestClient
-                .bindToServer()
-                .baseUrl("http://localhost:" + port + "/api/v1")
-                .responseTimeout(Duration.ofDays(1))
-                .build();
-    }
-
     @Test
     public void shouldGetInitialOrders_withTenOrders() {
-        // Arrange
-        testClient.get()
-                .uri("/basket")
-                // Act
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(Basket.class)
-                .consumeWith(response -> {
-                    List<Basket> basket = response.getResponseBody();
-                    // Assert
-                    assertNotNull(basket);
-                    assertFalse(basket.isEmpty(), "Expected at least 10 elements, but found " + basket.size());
+        // Act
+        ResponseEntity<Basket[]> response = restTemplate.getForEntity("/api/v1/basket", Basket[].class);
 
-                    basket.forEach(b -> {
-                        assertNotNull(b.getBasketStatus());
-                        assertNotNull(b.getBasketDateUtc());
-                    });
-                });
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        Basket[] body = response.getBody();
+        assertNotNull(body);
+
+        List<Basket> basketList = Arrays.asList(body);
+        assertFalse(basketList.isEmpty(), "Expected at least 10 elements, but found " + basketList.size());
+
+        basketList.forEach(b -> {
+            assertNotNull(b.getBasketStatus());
+            assertNotNull(b.getBasketDateUtc());
+        });
     }
-
 }

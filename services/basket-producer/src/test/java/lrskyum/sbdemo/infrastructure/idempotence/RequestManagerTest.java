@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.test.StepVerifier;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,39 +22,22 @@ public class RequestManagerTest {
 
     @Test
     void shouldHandleRequest_requestWasNotSubmittedEarlier() {
-        // Arrange
-
         // Act
-        var exists = requestManager.exist(UUID.randomUUID().toString());
+        boolean exists = requestManager.exist(UUID.randomUUID().toString());
 
         // Assert
-        StepVerifier.create(exists)
-                .expectSubscription()
-                .thenRequest(Long.MAX_VALUE)
-                .expectNextMatches(value -> value == false)
-                .expectComplete()
-                .verify();
+        assertThat(exists).isFalse();
     }
 
     @Test
     void shouldHandleRequest_submittingNewRequest() {
-        // Arrange
-
         // Act
-        var exists = requestManager.createRequestForCommand(UUID.randomUUID().toString(), "test");
+        var cr = requestManager.createRequestForCommand(UUID.randomUUID().toString(), "test");
 
         // Assert
-        StepVerifier.create(exists)
-                .expectSubscription()
-                .thenRequest(Long.MAX_VALUE)
-                .expectNextMatches(cr -> {
-                    assertNotNull(cr.getExtId());
-                    assertNotNull(cr.getName());
-                    assertNotNull(cr.getTime());
-                    return true;
-                })
-                .expectComplete()
-                .verify();
+        assertNotNull(cr.getExtId());
+        assertNotNull(cr.getName());
+        assertNotNull(cr.getTime());
     }
 
 }

@@ -10,10 +10,9 @@ import lrskyum.sbdemo.ui.BasketController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Component
@@ -27,18 +26,18 @@ public class DynamicDataInitializerRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        initializeData()
-                .doOnError(e -> log.error("Error initializing data: {}", e.getMessage()))
-                .doOnSuccess(unused -> log.info("Data initialized successfully"))
-                .block();
+        try {
+            initializeData();
+            log.info("Data initialized successfully");
+        } catch (Exception e) {
+            log.error("Error initializing data: {}", e.getMessage());
+        }
     }
 
-    public Mono<Void> initializeData() {
-        var x = Flux.range(0, 10)
-                .map(this::createNewBasketCommand)
-                .flatMap(cmd -> basketController.create(cmd, UUID.randomUUID().toString()));
-
-        return x.then();
+    public void initializeData() {
+        IntStream.range(0, 10)
+                .mapToObj(this::createNewBasketCommand)
+                .forEach(cmd -> basketController.create(cmd, UUID.randomUUID().toString()));
     }
 
     public NewBasketCommand createNewBasketCommand(int i) {
