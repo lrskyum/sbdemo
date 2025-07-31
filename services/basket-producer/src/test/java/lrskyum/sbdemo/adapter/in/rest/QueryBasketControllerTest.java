@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.adapters;
+package lrskyum.sbdemo.adapter.in.rest;
 
 import lrskyum.sbdemo.domain.aggregates.basket.Basket;
 import org.junit.jupiter.api.Test;

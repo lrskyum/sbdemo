@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.adapters;
+package lrskyum.sbdemo.adapter.in.rest;
 
 import lrskyum.sbdemo.application.commands.newbasket.NewBasketCommand;
 import lrskyum.sbdemo.domain.aggregates.basket.Basket;

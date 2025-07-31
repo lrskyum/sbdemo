@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.adapters;
+package lrskyum.sbdemo.adapter.in.rest;
 
 import lombok.RequiredArgsConstructor;
 import lrskyum.sbdemo.application.commands.newbasket.NewBasketCommand;

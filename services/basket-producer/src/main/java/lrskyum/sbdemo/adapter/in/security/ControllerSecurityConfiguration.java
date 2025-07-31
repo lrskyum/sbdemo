@@ -1,4 +1,4 @@
-package lrskyum.sbdemo.adapters;
+package lrskyum.sbdemo.adapter.in.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -6,7 +6,7 @@ import lrskyum.sbdemo.application.commands.newbasket.NewBasketCommand;
 import lrskyum.sbdemo.domain.aggregates.basket.BasketRepository;
 import lrskyum.sbdemo.domain.aggregates.basket.PaymentMethod;
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
-import lrskyum.sbdemo.adapters.BasketController;
+import lrskyum.sbdemo.adapter.in.rest.BasketController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
