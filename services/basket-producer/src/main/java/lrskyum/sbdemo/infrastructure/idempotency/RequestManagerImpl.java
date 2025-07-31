@@ -1,7 +1,7 @@
 package lrskyum.sbdemo.infrastructure.idempotency;
 
 import lombok.RequiredArgsConstructor;
-import lrskyum.sbdemo.business.exceptions.BasketDomainException;
+import lrskyum.sbdemo.domain.exceptions.BasketDomainException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

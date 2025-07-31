@@ -1,7 +1,7 @@
 package lrskyum.sbdemo.infrastructure.repository;
 
-import lrskyum.sbdemo.business.aggregates.basket.Basket;
-import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
+import lrskyum.sbdemo.domain.aggregates.basket.Basket;
+import lrskyum.sbdemo.domain.aggregates.basket.BasketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;

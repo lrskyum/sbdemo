@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.app.events.IntegrationEvent;
-import lrskyum.sbdemo.app.events.OutboxService;
+import lrskyum.sbdemo.application.events.IntegrationEvent;
+import lrskyum.sbdemo.application.events.OutboxService;
 
 import java.util.List;
 

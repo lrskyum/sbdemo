@@ -2,11 +2,11 @@ package lrskyum.sbdemo.infrastructure.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.app.commands.newbasket.NewBasketCommand;
-import lrskyum.sbdemo.business.aggregates.basket.BasketRepository;
-import lrskyum.sbdemo.business.aggregates.basket.PaymentMethod;
+import lrskyum.sbdemo.application.commands.newbasket.NewBasketCommand;
+import lrskyum.sbdemo.domain.aggregates.basket.BasketRepository;
+import lrskyum.sbdemo.domain.aggregates.basket.PaymentMethod;
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
-import lrskyum.sbdemo.ui.BasketController;
+import lrskyum.sbdemo.adapters.BasketController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

@@ -3,7 +3,7 @@ package lrskyum.sbdemo.infrastructure.commandbus;
 import an.awesome.pipelinr.Pipeline;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.app.commands.IdentifiedCommand;
+import lrskyum.sbdemo.application.commands.IdentifiedCommand;
 import lrskyum.sbdemo.infrastructure.idempotency.RequestManager;
 import org.springframework.stereotype.Component;
 

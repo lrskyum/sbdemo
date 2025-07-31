@@ -2,7 +2,7 @@ package lrskyum.sbdemo.infrastructure.outbox;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lrskyum.sbdemo.app.events.OutboxService;
+import lrskyum.sbdemo.application.events.OutboxService;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
